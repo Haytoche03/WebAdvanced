@@ -85,21 +85,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveTasks() {
-        const tasks = [];
-        tasksList.querySelectorAll('li').forEach(taskItem => {
-            const taskSpan = taskItem.querySelector('span');
-            tasks.push({
-                text: taskSpan.textContent,
-                completed: taskSpan.classList.contains('completed')
-            });
+        return new Promise((resolve, reject) => {
+            try {
+                const tasks = [];
+                tasksList.querySelectorAll('li').forEach(taskItem => {
+                    const taskSpan = taskItem.querySelector('span');
+                    tasks.push({
+                        text: taskSpan.textContent,
+                        completed: taskSpan.classList.contains('completed')
+                    });
+                });
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
         });
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
     }
-
+    
     function loadTasks() {
-        const tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
-        tasks.forEach(({text, completed}) => {
-            addTask(text, completed);
+        return new Promise((resolve, reject) => {
+            try {
+                const tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
+                tasks.forEach(({text, completed}) => {
+                    addTask(text, completed);
+                });
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
         });
     }
 
