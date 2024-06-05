@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
     loadTomorrowTasks();
 
-    consumeTasks();
+    fetchAndConsumeTasks();
 
     // Voeg een taak toe aan de lijst
     taskForm.addEventListener('submit', (event) => {
@@ -119,16 +119,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function consumeTasks() {
-        fetchTasks()
-    .then(tasks => {
-        tasks.forEach(task => {
-            addTask(task.name, false); 
-        });
-    })
-    .catch(error => {
-        console.error('Error consuming tasks:', error);
-    });
+    async function fetchAndConsumeTasks() {
+        try {
+            // Wacht tot de taken zijn opgehaald voordat je doorgaat
+            const tasks = await fetchTasks();
+    
+            // Voeg de taken toe aan de lijst
+            tasks.forEach(task => {
+                addTask(task.name, false);
+            });
+    
+            console.log('Tasks consumed successfully!');
+        } catch (error) {
+            // Vang eventuele fouten op die optreden tijdens het ophalen of verwerken van de taken
+            console.error('Error consuming tasks:', error);
+        }
     }
     
 
