@@ -126,20 +126,21 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Wacht tot de taken zijn opgehaald voordat je doorgaat
             const tasks = await fetchTasks();
-    
+            
             // Voeg de taken toe aan de lijst
-            tasks.forEach(task => {
-                addTask(task.name, false);
+            tasks.forEach(cart => {
+                cart.products.forEach(product => {
+                    addTask(`Product ID: ${product.productId}, Quantity: ${product.quantity}`, false);
+                });
             });
-    
+            
             console.log('Tasks consumed successfully!');
         } catch (error) {
             // Vang eventuele fouten op die optreden tijdens het ophalen of verwerken van de taken
             console.error('Error consuming tasks:', error);
         }
     }
-    
-
+     
     function fetchTasks() {
         return fetch('https://fakestoreapi.com/carts?limit=5')
             .then(res => {
@@ -149,12 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return res.json();
             })
             .then(json => {
-                console.log(json);
+                console.log(json); // Log de data om te controleren wat er terugkomt
                 return json;
             });
     }
     
-
     function saveTomorrowTasks() {
         const tasks = [];
         tomorrowTasksList.querySelectorAll('li').forEach(taskItem => {
