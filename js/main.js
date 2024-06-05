@@ -9,12 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const tomorrowTaskInput = document.getElementById('tomorrow-task-input');
     const tomorrowTasksList = document.getElementById('tomorrow-tasks');
     const mergeButton = document.getElementById('merge-tasks');
+    const fetchButton = document.getElementById('fetch-tasks'); // New fetch tasks button
 
     // Laad taken van LocalStorage
     loadTasks();
     loadTomorrowTasks();
-
-    fetchAndConsumeTasks();
 
     // Voeg een taak toe aan de lijst
     taskForm.addEventListener('submit', (event) => {
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addTask(taskText);
             taskInput.value = ''; // Leeg invoerveld
             saveTasks();
-        }else{
+        } else {
             alert('Please enter a task');
         }
     });
@@ -38,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addTomorrowTask(taskText);
             tomorrowTaskInput.value = ''; // Leeg invoerveld
             saveTomorrowTasks();
-        }else{
+        } else {
             alert('Please enter a task');
         }
     });
@@ -47,6 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const tomorrowTasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOMORROW)) || [];
         addMergedTasksToList(tomorrowTasks);
         clearTomorrowTasks();
+    });
+
+    fetchButton.addEventListener('click', () => {
+        fetchAndConsumeTasks();
     });
 
     function addTask(taskText, completed = false, list = tasksList) {
