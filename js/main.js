@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
             addTask(taskText);
             taskInput.value = ''; // Leeg invoerveld
             saveTasks();
+        }else{
+            alert('Please enter a task');
         }
     });
 
@@ -34,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
             addTomorrowTask(taskText);
             tomorrowTaskInput.value = ''; // Leeg invoerveld
             saveTomorrowTasks();
+        }else{
+            alert('Please enter a task');
         }
     });
 
