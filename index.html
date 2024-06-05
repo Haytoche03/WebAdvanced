@@ -11,14 +11,20 @@
         <h1>Todo List</h1>
     </header>
     <main>
-        <section id="todo-list">
-            <h2>My Tasks</h2>
-            <form id="task-form">
-                <input type="text" id="task-input" placeholder="Add new task">
-                <button type="submit" id="add-task-btn">Add Task</button>
-            </form>
-            <ul id="tasks"></ul>
-        </section>
+        <h2>My Tasks</h2>
+        <form id="task-form">
+            <input type="text" id="task-input" placeholder="Add new task">
+            <button type="submit" id="add-task-btn">Add Task</button>
+        </form>
+        <form id="tomorrow-task-form">
+            <input type="text" id="tomorrow-task-input" placeholder="Add a new task for tomorrow" required>
+            <button type="submit">Add Task for Tomorrow</button>
+        </form>
+        <button id="merge-tasks">Merge Tomorrow's Tasks to Today</button>
+        <h2>Today's Tasks</h2>
+        <ul id="tasks"></ul>
+        <h2>Tomorrow Tasks</h2>
+        <ul id="tomorrow-tasks"></ul>
     </main>
     <script src="js/main.js"></script>
 </body>

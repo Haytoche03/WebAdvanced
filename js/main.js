@@ -1,13 +1,20 @@
-'use strict'
+'use strict';
 document.addEventListener('DOMContentLoaded', () => {
     const LOCAL_STORAGE_KEY = 'tasks';
+    const LOCAL_STORAGE_KEY_TOMORROW = 'tasks-tomorrow';
     const taskForm = document.getElementById('task-form');
     const taskInput = document.getElementById('task-input');
     const tasksList = document.getElementById('tasks');
+    const tomorrowTaskForm = document.getElementById('tomorrow-task-form');
+    const tomorrowTaskInput = document.getElementById('tomorrow-task-input');
+    const tomorrowTasksList = document.getElementById('tomorrow-tasks');
+    const mergeButton = document.getElementById('merge-tasks');
 
     // Laad taken van LocalStorage
     loadTasks();
+    loadTomorrowTasks();
 
+    // Voeg een taak toe aan de lijst
     taskForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const taskText = taskInput.value.trim();
@@ -19,7 +26,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function addTask(taskText, completed = false) {
+    tomorrowTaskForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const taskText = tomorrowTaskInput.value.trim();
+        
+        if (taskText !== '') {
+            addTomorrowTask(taskText);
+            tomorrowTaskInput.value = ''; // Leeg invoerveld
+            saveTomorrowTasks();
+        }
+    });
+
+    mergeButton.addEventListener('click', () => {
+        const tomorrowTasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOMORROW)) || [];
+        addMergedTasksToList(tomorrowTasks);
+        clearTomorrowTasks();
+    });
+
+    function addTask(taskText, completed = false, list = tasksList) {
         const taskItem = document.createElement('li');
         
         const taskSpan = document.createElement('span');
@@ -29,19 +53,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         taskSpan.addEventListener('click', () => {
             taskSpan.classList.toggle('completed');
-            saveTasks();
+            if (list === tasksList) {
+                saveTasks();
+            } else {
+                saveTomorrowTasks();
+            }
         });
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Remove';
         deleteButton.addEventListener('click', () => {
-            tasksList.removeChild(taskItem);
-            saveTasks();
+            list.removeChild(taskItem);
+            if (list === tasksList) {
+                saveTasks();
+            } else {
+                saveTomorrowTasks();
+            }
         });
 
         taskItem.appendChild(taskSpan);
         taskItem.appendChild(deleteButton);
-        tasksList.appendChild(taskItem);
+        list.appendChild(taskItem);
+    }
+
+    function addTomorrowTask(taskText, completed = false) {
+        addTask(taskText, completed, tomorrowTasksList);
     }
 
     function saveTasks() {
@@ -57,12 +93,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadTasks() {
-        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
         tasks.forEach(({text, completed}) => {
-            addTask(task.text, task.completed);
+            addTask(text, completed);
         });
     }
+
+    function saveTomorrowTasks() {
+        const tasks = [];
+        tomorrowTasksList.querySelectorAll('li').forEach(taskItem => {
+            const taskSpan = taskItem.querySelector('span');
+            tasks.push({
+                text: taskSpan.textContent,
+                completed: taskSpan.classList.contains('completed')
+            });
+        });
+        localStorage.setItem(LOCAL_STORAGE_KEY_TOMORROW, JSON.stringify(tasks));
+    }
+
+    function loadTomorrowTasks() {
+        const tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOMORROW)) || [];
+        tasks.forEach(({ text, completed }) => {
+            addTask(text, completed, tomorrowTasksList);
+        });
+    }
+
+    function clearTomorrowTasks() {
+        localStorage.removeItem(LOCAL_STORAGE_KEY_TOMORROW);
+        while (tomorrowTasksList.firstChild) {
+            tomorrowTasksList.removeChild(tomorrowTasksList.firstChild);
+        }
+    }
+
+    // Voeg samengevoegde taken toe aan de lijst
+    function addMergedTasksToList(tasks) {
+        tasks.forEach(task => addTask(task.text, task.completed));
+        saveTasks(); // Sla de samengevoegde taken op in LocalStorage
+    }
+
+    function mergeTasks(...taskArrays) {
+        return [].concat(...taskArrays);
+    }
 });
-
-
-
