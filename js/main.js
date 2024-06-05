@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const taskItem = document.createElement('li');
         
         const taskSpan = document.createElement('span');
-        taskSpan.textContent = taskText;
+        taskSpan.textContent = `${taskText}`;
         if (completed) {
             taskSpan.classList.add('completed');
         }
