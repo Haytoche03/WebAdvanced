@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
     loadTomorrowTasks();
 
+    consumeTasks();
+
     // Voeg een taak toe aan de lijst
     taskForm.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -116,6 +118,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    function consumeTasks() {
+        fetchTasks()
+    .then(tasks => {
+        tasks.forEach(task => {
+            addTask(task.name, false); 
+        });
+    })
+    .catch(error => {
+        console.error('Error consuming tasks:', error);
+    });
+    }
+    
+
+    function fetchTasks() {
+        return fetch('https://fakestoreapi.com/carts?limit=5')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Unable to fetch tasks');
+                }
+                return res.json();
+            })
+            .then(json => {
+                console.log(json);
+                return json;
+            });
+    }
+    
 
     function saveTomorrowTasks() {
         const tasks = [];
