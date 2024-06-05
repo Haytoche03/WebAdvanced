@@ -1,8 +1,9 @@
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -11,7 +12,7 @@ body {
 
 header {
     background-color: #4CAF50;
-    color: #fff;
+    color: white;
     padding: 10px 0;
     text-align: center;
     width: 100%;
@@ -21,20 +22,27 @@ main {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-form{
+form {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+    width: 100%;
 }
 
-input{
+input {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ccc;
     font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 button {
@@ -55,6 +63,7 @@ button:hover {
 ul {
     list-style: none;
     padding: 0;
+    width: 100%;
 }
 
 li {
@@ -63,9 +72,22 @@ li {
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ccc;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .completed {
     text-decoration: line-through;
     color: #888;
+    transition: color 0.3s, text-decoration 0.3s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
